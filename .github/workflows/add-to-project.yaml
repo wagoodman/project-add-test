@@ -21,7 +21,7 @@ jobs:
     with:
       project_url: https://github.com/users/wagoodman/projects/1
     secrets:
-      token: ${{ secrets.API_TOKEN_GITHUB }}
+      token: ${{ secrets.OSS_PROJECT_GH_TOKEN }}
 
   # add-issue-to-board:
   #   name: Add issue to the community board
