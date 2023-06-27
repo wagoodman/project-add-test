@@ -10,7 +10,7 @@ on:
         type: string
 
       users:
-        default: '["wagoodman"]'
+        default: '["wagoodman", "dependabot"]'
         description: "JSON list as string of users to ignore"
         type: string
 
