@@ -32,12 +32,12 @@ jobs:
           echo "Number: ${{ github.event.issue.number }}"
           echo "Issue Author: '${{ github.event.issue.user.login }}' is-oss-user=${{ !contains(fromJson(  inputs.users ), github.event.issue.user.login) && github.event.issue.user.login != '' }}"
           echo "PR Author: '${{ github.event.pull_request.user.login }}' is-oss-user=${{ !contains(fromJson( inputs.users ), github.event.pull_request.user.login) && github.event.pull_request.user.login != '' }}"
-          echo "Avoid users: ${{ inputs.users }}"
+          echo "Ignore users: ${{ inputs.users }}"
 
 
   add-issue-to-board:
     name: Add issue to the community board
-    if: github.event_name == 'issues' && !contains(fromJson( ${{ inputs.users }} ), github.event.issue.user.login)
+    if: github.event_name == 'issues' && !contains(fromJson(  inputs.users ), github.event.issue.user.login) && github.event.issue.user.login != ''
     runs-on: ubuntu-latest
     steps:
       - name: Show event info
@@ -55,7 +55,7 @@ jobs:
 
   add-pr-to-board:
     name: Add PR to the community board
-    if: github.event_name == 'pull_request' && !contains(fromJson( ${{ inputs.users }} ), github.event.pull_request.user.login)
+    if: github.event_name == 'pull_request' && !contains(fromJson( inputs.users ), github.event.pull_request.user.login) && github.event.pull_request.user.login != ''
     runs-on: ubuntu-latest
     steps:
       - name: Show event info
