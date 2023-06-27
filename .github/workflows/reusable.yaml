@@ -7,13 +7,11 @@ on:
       project_url:
         default: https://github.com/users/wagoodman/projects/1
         description: "The URL of the project to add the issue or PR to"
-        required: true
         type: string
 
       users:
         default: '["wagoodman"]'
         description: "JSON list as string of users to ignore"
-        required: true
         type: string
 
     secrets:
