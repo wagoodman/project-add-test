@@ -1,4 +1,4 @@
-name: Add issues to the community board
+name: Add Issues and PRs to the Community Board
 
 on:
   issues:
@@ -15,6 +15,15 @@ on:
       - reopened
 
 jobs:
+
+  show-info:
+    name: Show event info
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show event info
+        run: |
+          echo "event_name: ${{ github.event_name }}"
+          echo "event: ${{ toJson(github.event) }}"
 
   add-issue-to-board:
     name: Add issue to the community board
