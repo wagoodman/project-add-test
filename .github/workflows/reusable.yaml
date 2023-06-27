@@ -1,0 +1,61 @@
+name: Actually add to project
+
+on: 
+  workflow_call:
+
+    inputs:
+      project_url:
+        default: https://github.com/users/wagoodman/projects/1
+        description: "The URL of the project to add the issue or PR to"
+        required: true
+        type: string
+
+      users:
+        default: '["wagoodman"]'
+        description: "JSON list as string of users to ignore"
+        required: true
+        type: string
+
+    secrets:
+      token:
+        description: "The classic GitHub token (with project access) to use for authentication"
+        required: true
+
+
+jobs:
+
+  show-info:
+    name: Show issue or PR event info
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show event info
+        run: |
+          echo "Event Name: ${{ github.event_name }}"
+          echo "Number: ${{ github.event.issue.number }}"
+          echo "Issue Author: ${{ github.event.issue.user.login }}"
+          echo "PR Author: ${{ github.event.pull_request.user.login }}"
+
+
+  add-issue-to-board:
+    name: Add issue to the community board
+    if: github.event_name == 'issues' && !contains(fromJson( ${{ inputs.users }} ), github.event.issue.user.login)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v0.5.0
+        with:
+          project-url: ${{ inputs.project_url }}
+          github-token: ${{ secrets.token }}
+          labeled: bug, enhancement
+          label-operator: OR
+
+  add-pr-to-board:
+    name: Add PR to the community board
+    if: github.event_name == 'pull_request' && !contains(fromJson( ${{ inputs.users }} ), github.event.pull_request.user.login)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v0.5.0
+        with:
+          project-url: ${{ inputs.project_url }}
+          github-token: ${{ secrets.token }}
+          labeled: bug, enhancement
+          label-operator: OR
