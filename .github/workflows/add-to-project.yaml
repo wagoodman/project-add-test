@@ -8,9 +8,29 @@ on:
       - transferred
       - labeled
 
+  pull_request:
+    types:
+      - labeled
+      - opened
+      - reopened
+
 jobs:
-  add-to-board:
+
+  add-issue-to-board:
     name: Add issue to the community board
+    if: github.event_name == 'issue' && !contains(fromJson('["wagoodman"]'), github.event.issue.user.login)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v0.5.0
+        with:
+          project-url: https://github.com/users/wagoodman/projects/1
+          github-token: ${{ secrets.OSS_PROJECT_GH_TOKEN }}
+          labeled: bug, enhancement
+          label-operator: OR
+
+  add-pr-to-board:
+    name: Add PR to the community board
+    if: github.event_name == 'pull_request' && !contains(fromJson('["wagoodman"]'), github.event.pull_request.user.login)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/add-to-project@v0.5.0
