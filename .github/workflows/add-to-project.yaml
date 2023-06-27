@@ -19,7 +19,6 @@ jobs:
   add-to-board:
     uses: "wagoodman/project-add-test/.github/workflows/reusable.yaml@main"
     with:
-      event_name: ${{ github.event_name }}
       project_url: https://github.com/users/wagoodman/projects/1
     secrets:
       token: ${{ secrets.OSS_PROJECT_GH_TOKEN }}
