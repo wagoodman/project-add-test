@@ -4,6 +4,11 @@ on:
   workflow_call:
 
     inputs:
+      event_name:
+        required: true
+        description: "The github.event_name triggered on"
+        type: string
+
       project_url:
         default: https://github.com/users/wagoodman/projects/1
         description: "The URL of the project to add the issue or PR to"
@@ -28,19 +33,19 @@ jobs:
     steps:
       - name: Show event info
         run: |
-          echo "Event Name: ${{ github.event_name }}"
+          echo "Event Name: ${{ inputs.event_name }}"
           echo "Number: ${{ github.event.issue.number }}"
           echo "Issue Author: ${{ github.event.issue.user.login }}"
           echo "PR Author: ${{ github.event.pull_request.user.login }}"
 
   add-issue-to-board:
     name: Add issue to the community board
-    if: github.event_name == 'issues' && !contains(fromJson( ${{ inputs.users }} ), github.event.issue.user.login)
+    if: inputs.event_name == 'issues' && !contains(fromJson( ${{ inputs.users }} ), github.event.issue.user.login) && github.event.issue.user.login != ''
     runs-on: ubuntu-latest
     steps:
       - name: Show event info
         run: |
-          echo "Event Name: ${{ github.event_name }}"
+          echo "Event Name: ${{ inputs.event_name }}"
           echo "Number: ${{ github.event.issue.number }}"
           echo "Issue Author: ${{ github.event.issue.user.login }}"
 
@@ -53,12 +58,12 @@ jobs:
 
   add-pr-to-board:
     name: Add PR to the community board
-    if: github.event_name == 'pull_request' && !contains(fromJson( ${{ inputs.users }} ), github.event.pull_request.user.login)
+    if: inputs.event_name == 'pull_request' && !contains(fromJson( ${{ inputs.users }} ), github.event.pull_request.user.login) && github.event.pull_request.user.login != ''
     runs-on: ubuntu-latest
     steps:
       - name: Show event info
         run: |
-          echo "Event Name: ${{ github.event_name }}"
+          echo "Event Name: ${{ inputs.event_name }}"
           echo "Number: ${{ github.event.issue.number }}"
           echo "PR Author: ${{ github.event.pull_request.user.login }}"
   
